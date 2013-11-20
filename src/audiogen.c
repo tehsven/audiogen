@@ -4,11 +4,18 @@
 #include <string.h>
 #include "tinyAudioLib.h"
 #include "oscillator_trunc_table_lookup.h"
+#include "oscillator_basic.h"
 
 void setup() {
 	tinyInit();
+	
+	// oscillator_trunc_table_lookup
 	out_sample_func(&outSampleMono);
 	use_sine();
+
+	// oscillator_basic
+	oscbasic_out_sample_func(&outSampleMono);
+	oscbasic_use_sine();
 }
 
 void teardown() {
@@ -32,6 +39,7 @@ int main() {
 		// setup
 		double note[10];
 		float duration;
+		char *osc;
 
 		// grab user input		 
 		puts("reading input line");
@@ -50,25 +58,34 @@ int main() {
 		char *token = strtok(instr, delim);
 		puts("token grabbed");
 
-		int token_count = 0;
+		int i = 0;
+		int note_count = 0;
 		do {
 			if (token == NULL)
 				continue;
-			if (token_count == 0)
+			if (i == 0)
+				osc = token;
+			else if (i == 1)
 				duration = atof(token);
-			else
-				note[token_count] = key_to_freq(atoi(token));
+			else {
+				note[note_count] = key_to_freq(atoi(token));
+				note_count++;
+			}
 
 			puts("grabbing next token");
 			token = strtok(NULL, delim);
 			puts(token);
-			token_count++;
-
+			i++;
 		}
 		while (token != NULL);
 
 		// play the music
-		playchord(duration, token_count, note);
+		if (strcmp(osc, "ttl") == 0) {
+			playchord(duration, note_count, note);
+		}
+		else if (strcmp(osc, "basic") == 0) {	
+			oscbasic_playchord(duration, note_count, note);
+		}
 	}
 
 	teardown();
