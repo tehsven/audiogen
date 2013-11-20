@@ -3,9 +3,12 @@
 #include <math.h>
 #include <string.h>
 #include "tinyAudioLib.h"
+#include "oscillator_trunc_table_lookup.h"
 
 void setup() {
 	tinyInit();
+	out_sample_func(&outSampleMono);
+	use_sine();
 }
 
 void teardown() {
@@ -65,7 +68,7 @@ int main() {
 		while (token != NULL);
 
 		// play the music
-		// playchord(duration, token_count, note);
+		playchord(duration, token_count, note);
 	}
 
 	teardown();
