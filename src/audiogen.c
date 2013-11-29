@@ -15,7 +15,10 @@ void setup() {
 
 	// oscillator_basic
 	oscbasic_out_sample_func(&outSampleMono);
-	oscbasic_use_sine();
+	// oscbasic_use_sine();
+	// oscbasic_use_const();
+	oscbasic_use_saw();
+	// oscbasic_use_square();
 }
 
 void teardown() {

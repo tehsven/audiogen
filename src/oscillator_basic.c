@@ -14,8 +14,33 @@ void oscbasic_out_sample_func(void (*func)(float)) {
 /*----- end output sample function -----*/
 
 double (*oscbasic_wave_func)(double);
+
+double constant_wave_func(double phase) {
+	return 0.25;
+}
+
+double saw_wave_func(double phase) {
+	return 1 - (phase / PI);
+}
+
+double square_wave_func(double phase) {
+	return phase = PI ? 1 : -1;
+}
+
 void oscbasic_use_sine() {
 	oscbasic_wave_func = &sin;
+}
+
+void oscbasic_use_square() {
+	oscbasic_wave_func = &square_wave_func;
+}
+
+void oscbasic_use_saw() {
+	oscbasic_wave_func = &saw_wave_func;
+}
+
+void oscbasic_use_const() {
+	oscbasic_wave_func = &constant_wave_func;
 }
 
 void oscbasic_playchord(double duration, int freqs, double freq[]) {
